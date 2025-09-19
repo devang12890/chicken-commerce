@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Payment</title>
+    <style>
+        body { margin:0; font-family:Arial, sans-serif; background:#f8f9fa; }
+        header { background:#dc3545; color:#fff; padding:15px; text-align:center; font-size:24px; }
+        .box { width:90%; max-width:500px; margin:40px auto; background:#fff; padding:20px; border-radius:8px; }
+        .btn { padding:10px 20px; background:#28a745; color:#fff; border:none; border-radius:5px; cursor:pointer; }
+    </style>
+</head>
+<body>
+<header>Chicken - Payment</header>
+<div class="box">
+    <h2>Make Payment</h2>
+    <p>Total: ₹<span id="total">0</span></p>
+    <p>Note: This demo doesn't process real payments. Click Pay to simulate success.</p>
+    <button class="btn" onclick="pay()">Pay</button>
+</div>
+
+<script>
+    document.getElementById('total').innerText = localStorage.getItem('orderTotal') || localStorage.getItem('cartTotal') || '0';
+    function pay() {
+      // simulate payment success
+      window.location.href = '/confirmation.html';
+    }
+</script>
+</body>
+</html>

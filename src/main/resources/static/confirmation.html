@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Confirmation</title>
+    <style>
+        body { margin:0; font-family:Arial, sans-serif; background:#f8f9fa; }
+        header { background:#dc3545; color:#fff; padding:15px; text-align:center; font-size:24px; }
+        .box { width:90%; max-width:600px; margin:40px auto; background:#fff; padding:20px; border-radius:8px; text-align:center; }
+        .btn { padding:8px 14px; background:#dc3545; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+    </style>
+</head>
+<body>
+<header>Order Confirmed</header>
+<div class="box">
+    <h2>Thank you!</h2>
+    <p>Your order has been placed successfully.</p>
+    <p>Order id: <strong id="orderId">-</strong></p>
+    <button class="btn" onclick="goHome()">Continue Shopping</button>
+</div>
+
+<script>
+    document.getElementById('orderId').innerText = localStorage.getItem('orderId') || 'N/A';
+    function goHome() {
+      // clear cart on confirmation (call backend to clear)
+      fetch('/api/cart', { method: 'DELETE' }).finally(() => {
+        localStorage.removeItem('cartTotal');
+        localStorage.removeItem('orderId');
+        window.location.href = '/index.html';
+      });
+    }
+</script>
+</body>
+</html>

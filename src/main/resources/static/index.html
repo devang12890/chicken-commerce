@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chicken Store</title>
+  <style>
+    body { margin:0; font-family:Arial, sans-serif; background:#f8f9fa; }
+    header { background:#dc3545; color:#fff; padding:15px; text-align:center; font-size:24px; }
+    nav { display:flex; justify-content:space-between; align-items:center; background:#fff; padding:10px 20px; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+    nav .brand { font-size:20px; font-weight:bold; color:#dc3545; }
+    nav .cart-btn { background:#dc3545; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer; }
+    .products { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; padding:20px; }
+    .product { background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center; }
+    .product img { width:100%; height:150px; object-fit:cover; border-radius:8px; }
+    .product h3 { margin:10px 0; font-size:18px; }
+    .product p { font-size:14px; color:#555; }
+    .product button { background:#dc3545; color:#fff; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; margin-top:10px; }
+  </style>
+</head>
+<body>
+<header>Chicken</header>
+<nav>
+  <div class="brand">🐔 Chicken Store</div>
+  <button class="cart-btn" onclick="location.href='/cart.html'">🛒 Cart</button>
+</nav>
+
+<div class="products" id="products"></div>
+
+<script>
+  async function loadProducts() {
+    try {
+      const res = await fetch('/api/products');
+      if (!res.ok) throw new Error('No products');
+      const products = await res.json();
+      render(products);
+    } catch (err) {
+      console.error(err);
+      document.getElementById('products').innerHTML = '<p>Unable to load products.</p>';
+    }
+  }
+
+  function render(products) {
+    const container = document.getElementById('products');
+    container.innerHTML = '';
+    products.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <img src="${p.imgUrl}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>₹${p.price}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  async function addToCart(productId) {
+    try {
+      const res = await fetch('/api/cart', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ productId, qty: 1 })
+      });
+      if (!res.ok) throw new Error('Add failed');
+      alert('Added to cart');
+    } catch (err) {
+      console.error(err);
+      alert('Unable to add to cart');
+    }
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>
