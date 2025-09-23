@@ -35,11 +35,12 @@
 </div>
 
 <script>
+    const API_BASE = "https://chicken-commerce.onrender.com";
     let cart = [];
 
     async function loadCart() {
       try {
-        const res = await fetch('/api/cart');
+        const res = await fetch(${API_BASE}/api/cart);
         if (!res.ok) throw new Error('Cart fetch failed');
         cart = await res.json();
         renderCart();
@@ -87,9 +88,9 @@
     async function updateQty(itemId, newQty) {
       try {
         if (newQty <= 0) {
-          await fetch(`/api/cart/${itemId}`, { method: 'DELETE' });
+          await fetch(${API_BASE}/api/cart/${itemId}, { method: 'DELETE' });
         } else {
-          await fetch(`/api/cart/${itemId}`, {
+          await fetch(${API_BASE}/api/cart/${itemId}, {
             method: 'PUT',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({ qty: newQty })
@@ -104,7 +105,7 @@
 
     async function removeItem(id) {
       try {
-        await fetch(`/api/cart/${id}`, { method: 'DELETE' });
+        await fetch(${API_BASE}/api/cart/${id}, { method: 'DELETE' });
         await loadCart();
       } catch (err) {
         console.error(err);

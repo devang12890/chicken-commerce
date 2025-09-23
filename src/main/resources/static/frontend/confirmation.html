@@ -16,19 +16,31 @@
 <div class="box">
     <h2>Thank you!</h2>
     <p>Your order has been placed successfully.</p>
-    <p>Order id: <strong id="orderId">-</strong></p>
+    <p>Order ID: <strong id="orderId">-</strong></p>
     <button class="btn" onclick="goHome()">Continue Shopping</button>
 </div>
 
 <script>
+    // 🔑 Change this to your Render backend API URL
+    const API_BASE = "https://your-render-backend.onrender.com";
+
+    // show orderId
     document.getElementById('orderId').innerText = localStorage.getItem('orderId') || 'N/A';
-    function goHome() {
-      // clear cart on confirmation (call backend to clear)
-      fetch('/api/cart', { method: 'DELETE' }).finally(() => {
-        localStorage.removeItem('cartTotal');
+
+    async function goHome() {
+      try {
+        // clear cart on backend
+        await fetch(${API_BASE}/api/cart, { method: 'DELETE' });
+      } catch (err) {
+        console.warn("Cart clear failed, but continuing...", err);
+      } finally {
+        // clear cart/order data from localStorage        .removeItem('cartTotal');
         localStorage.removeItem('orderId');
+        localStorage.removeItem('orderTotal');
+
+        // go back to homepage
         window.location.href = '/index.html';
-      });
+      }
     }
 </script>
 </body>

@@ -28,9 +28,11 @@
 <div class="products" id="products"></div>
 
 <script>
+  const API_BASE = "https://chicken-commerce.onrender.com";
+
   async function loadProducts() {
     try {
-      const res = await fetch('/api/products');
+      const res = await fetch(${API_BASE}/api/products);
       if (!res.ok) throw new Error('No products');
       const products = await res.json();
       render(products);
@@ -58,7 +60,7 @@
 
   async function addToCart(productId) {
     try {
-      const res = await fetch('/api/cart', {
+      const res = await fetch(${API_BASE}/api/cart, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ productId, qty: 1 })

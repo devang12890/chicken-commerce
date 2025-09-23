@@ -27,12 +27,15 @@
 </div>
 
 <script>
+    // 🔑 Change this to your Render backend API URL
+    const API_BASE = "https://your-render-backend.onrender.com";
+
     async function saveAddress(e) {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const pincode = document.getElementById('pincode').value;
-      const address = document.getElementById('address').value;
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const pincode = document.getElementById('pincode').value.trim();
+      const address = document.getElementById('address').value.trim();
       const total = Number(localStorage.getItem('cartTotal') || 0);
 
       if (!total || total <= 0) {
@@ -43,15 +46,19 @@
       const payload = { name, phone, pincode, address, total };
 
       try {
-        const res = await fetch('/api/orders', {
+        const res = await fetch(`${API_BASE}/api/orders`, {
           method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: { 'Content-Type':'application/json' },
           body: JSON.stringify(payload)
         });
-        if (!res.ok) throw new Error('order failed');
+
+        if (!res.ok) throw new Error('Order failed');
         const order = await res.json();
+
+        // save order data locally
         localStorage.setItem('orderId', order.id);
         localStorage.setItem('orderTotal', order.total);
+
         window.location.href = '/payment.html';
       } catch (err) {
         console.error(err);
